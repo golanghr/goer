@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"text/template"
 	"time"
 
 	"github.com/golanghr/goer/lib/handlers/gzip"
@@ -12,7 +13,15 @@ import (
 const sitePath = "./"
 const httpPort = "9000"
 
+var tpls map[string]*template.Template
+
+func init() {
+	tpls = templateList(sitePath + "templates/")
+}
+
 func main() {
+	http.Handle("/", &registration{})
+
 	http.Handle("/resources/", gzip.Handler(static.Handler(sitePath)))
 
 	s := &http.Server{

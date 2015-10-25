@@ -1,0 +1,29 @@
+{{define "content"}}
+
+<h2>Event registration</h2>
+
+<form action="#">
+	
+	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+		<input class="mdl-textfield__input" type="text" id="name" name="name" />
+		<label class="mdl-textfield__label" for="name">Name</label>
+	</div>
+	
+	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+		<input class="mdl-textfield__input" type="text" id="surname" name="surname" />
+		<label class="mdl-textfield__label" for="surname">Surname</label>
+	</div>
+	
+	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+		<input class="mdl-textfield__input" type="email" id="email" name="email" />
+		<label class="mdl-textfield__label" for="email">Email</label>
+	</div>
+
+	<div>
+		<input type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" name="submit" value="Submit" disabled/>
+	</div>
+		
+
+</form>
+
+{{end}}
