@@ -16,7 +16,7 @@
 
 .event-container {
   max-width: 1600px;
-  width: calc(100% - 16px);
+  /*width: calc(100% - 16px);*/
   margin: 0 auto;
 }
 
@@ -24,4 +24,21 @@
   border-radius: 2px;
   padding: 80px 56px;
   margin-bottom: 80px;
+}
+
+section.section--center {
+  max-width: 860px;
+}
+
+.section__form {
+    padding-top: 1.5em;
+    padding-bottom: 3em;
+}
+
+.card-title {
+    padding-top: 1em;
+}
+
+form {
+    padding-bottom: 2em;
 }
