@@ -9,24 +9,25 @@
 				<form id="registrationForm" action="/" method="post">
 					
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" type="text" id="name" name="name" pattern="[A-Za-z\sČĆŽŠĐčćžšđ]+" />
+						<input class="mdl-textfield__input" type="text" id="name" name="name" pattern="[A-Za-z\sČĆŽŠĐčćžšđ]+" data-required />
 						<label class="mdl-textfield__label" for="name">Name</label>
 						<span class="mdl-textfield__error">Please provide name.</span>
 					</div>
 					
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" type="text" id="surname" name="surname" pattern="[A-Za-z\sČĆŽŠĐčćžšđ]+" />
+						<input class="mdl-textfield__input" type="text" id="surname" name="surname" pattern="[A-Za-z\sČĆŽŠĐčćžšđ]+" data-required />
 						<label class="mdl-textfield__label" for="surname">Surname</label>
 						<span class="mdl-textfield__error">Please provide surname.</span>
 					</div>
 					
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" type="email" id="email" name="email" />
+						<input class="mdl-textfield__input" type="email" id="email" name="email" data-required />
 						<label class="mdl-textfield__label" for="email">Email</label>
+						<span class="mdl-textfield__error">Please provide valid email.</span>
 					</div>
 
 					<div>
-						<input type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" name="submit" value="Submit" />
+						<input type="submit" id="submitBtn" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" name="submit" value="Submit" disabled />
 					</div>
 					
 
@@ -42,117 +43,39 @@
 {{define "header"}}
 
 <script>
+function checkAllRequiredFields(){
+    var formValid = false;
+    
+    $('.mdl-textfield__input[data-required]').each(function(ix, el){
+	formValid = true;
+	var elm = $(el);
+	
+	if (elm.val().length == 0) {
+	    formValid = false;
+	    return;
+	}
+
+	if (typeof elm[0].checkValidity != "undefined") {
+	    if (elm[0].checkValidity() == false) {
+		formValid = false;
+		return;
+	    }
+	}
+    });
+
+    if (formValid) {
+	$('#submitBtn').removeAttr('disabled');
+    } else {
+	$('#submitBtn').attr('disabled', 'disabled');
+    }
+}
 
 $(document).ready(function(){
-								
-var form = document.getElementById("registrationForm");
-form.noValidate = true;
 
-form.onsubmit = validateForm;
-
-function validateForm(event) {
-								// fetch cross-browser event object and form node
-								event = (event ? event : window.event);
-								var
-								form = (event.target ? event.target : event.srcElement),
-																f, field, formvalid = true;
-
-								// loop all fields
-								for (f = 0; f < form.elements; f++) {
-
-																// get field
-																field = form.elements[f];
-
-																// ignore buttons, fieldsets, etc.
-																if (field.nodeName !== "INPUT" && field.nodeName !== "TEXTAREA" && field.nodeName !== "SELECT") continue;
-
-																// is native browser validation available?
-																if (typeof field.willValidate !== "undefined") {
-
-																								// native validation available
-																								if (field.nodeName === "INPUT" && field.type !== field.getAttribute("type")) {
-
-																																// input type not supported! Use legacy JavaScript validation
-																																field.setCustomValidity(LegacyValidation(field) ? "" : "error");
-
-																								}
-
-																								// native browser check
-																								field.checkValidity();
-
-																}
-																else {
-
-																								// native validation not available
-																								field.validity = field.validity || {};
-
-																								// set to result of validation function
-																								field.validity.valid = LegacyValidation(field);
-																								
-																								// if "invalid" events are required, trigger it here
-																								
-																}
-
-																if (field.validity.valid) {
-
-																								// remove error styles and messages
-																								formvalid = true;
-																								
-																}
-																else {
-																								// style field, show error, etc.
-
-																								// form is invalid
-																								formvalid = false;
-																}
-
-								}
-
-								// cancel form submit if validation fails
-								if (!formvalid) {
-																if (event.preventDefault) event.preventDefault();
-								}
-								return formvalid;
-}
-
-
-// basic legacy validation checking
-function LegacyValidation(field) {
-
-								var
-								valid = true,
-																val = field.value,
-																type = field.getAttribute("type"),
-																chkbox = (type === "checkbox" || type === "radio"),
-																required = field.getAttribute("required"),
-																minlength = field.getAttribute("minlength"),
-																maxlength = field.getAttribute("maxlength"),
-																pattern = field.getAttribute("pattern");
-
-								// disabled fields should not be validated
-								if (field.disabled) return valid;
-
-								// value required?
-																valid = valid && (!required ||
-																								(chkbox && field.checked) ||
-																								(!chkbox && val !== "")
-																);
-
-								// minlength or maxlength set?
-																								valid = valid && (chkbox || (
-																																(!minlength || val.length >= minlength) &&
-																																(!maxlength || val.length <= maxlength)
-																								));
-
-								// test pattern
-								if (valid && pattern) {
-																pattern = new RegExp(pattern);
-																valid = pattern.test(val);
-								}
-
-								return valid;
-}
-								
+    $('.mdl-textfield__input[data-required]').keyup(function(ev) {
+	checkAllRequiredFields();
+    });
+    
 });
 </script>
 
