@@ -20,7 +20,9 @@ func init() {
 }
 
 func main() {
-	http.Handle("/", &registration{})
+	http.Handle("/", &RegistrationTxtStorage{
+		Registration: Registration{"", "", "", time.Now()},
+		Filename:     sitePath + "registrations"})
 
 	http.Handle("/resources/", gzip.Handler(static.Handler(sitePath)))
 
