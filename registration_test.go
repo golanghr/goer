@@ -9,19 +9,23 @@ import (
 	"time"
 )
 
-type RegWithMockStore struct {
-	Registration
-	storeMethod func()
+type DummyStore struct {
+	storeMethod func(reg Registration) (err error)
 }
 
-func (r RegWithMockStore) Store() {
-	r.storeMethod()
+func (s DummyStore) Store(reg Registration) (err error) {
+	return s.storeMethod(reg)
 }
 
-func NewDummyRegWithMockStore() RegWithMockStore {
-	return RegWithMockStore{
-		Registration{"", "", "", time.Now()},
-		func() {}}
+func NewDummyReg() *Registration {
+	dummyStore := DummyStore{func(reg Registration) (err error) { return nil }}
+
+	return &Registration{
+		"",
+		"",
+		"",
+		time.Now(),
+		dummyStore}
 }
 
 func TestFormDisplay(t *testing.T) {
@@ -32,7 +36,7 @@ func TestFormDisplay(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	reg := NewDummyRegWithMockStore()
+	reg := NewDummyReg()
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusOK {
@@ -52,7 +56,7 @@ func TestFormProcessBadRequest(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	reg := NewDummyRegWithMockStore()
+	reg := NewDummyReg()
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusBadRequest {
@@ -68,7 +72,7 @@ func TestFormProcessBadRequest(t *testing.T) {
 	}
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	reg = NewDummyRegWithMockStore()
+	reg = NewDummyReg()
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusBadRequest {
@@ -85,7 +89,7 @@ func TestFormProcessOkRequest(t *testing.T) {
 	}
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	reg := NewDummyRegWithMockStore()
+	reg := NewDummyReg()
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusOK {
@@ -101,12 +105,14 @@ func TestStoreCall(t *testing.T) {
 		}
 	}()
 
-	dummyReg := NewDummyRegWithMockStore()
-	dummyReg.storeMethod = func() {
+	storeChecker := func(reg Registration) (err error) {
 		storeCalled = true
+		return nil
 	}
 
-	reg := dummyReg
+	dummyStore := DummyStore{storeChecker}
+
+	reg := &Registration{"", "", "", time.Now(), dummyStore}
 
 	req, err := http.NewRequest("POST", "/", strings.NewReader("name=Test&surname=Test&email=test@test.com"))
 	if err != nil {

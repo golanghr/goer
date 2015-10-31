@@ -1,14 +1,15 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"regexp"
 	"time"
 )
 
-type Storer interface {
-	Store()
+type RegistrationStorer interface {
+	Store(reg Registration) (err error)
 }
 
 type Registration struct {
@@ -16,6 +17,7 @@ type Registration struct {
 	Surname string
 	Email   string
 	Created time.Time
+	Storer  RegistrationStorer
 }
 
 func (reg *Registration) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -50,35 +52,31 @@ func (reg *Registration) processForm(w http.ResponseWriter, r *http.Request) {
 	reg.Name = name
 	reg.Surname = surname
 	reg.Email = email
+	reg.Created = time.Now()
+
+	err := reg.Storer.Store(*reg)
+	if err != nil {
+		log.Printf("Error %s while storing registration %+v\n", err, reg)
+		http.Error(w, "Registration storage failed.", http.StatusInternalServerError)
+	}
 }
 
-type RegistrationTxtStorage struct {
-	Registration
+type RegTxtStorage struct {
 	Filename string
 }
 
-func (r *RegistrationTxtStorage) Store() {
+func (r *RegTxtStorage) Store(reg Registration) (err error) {
 	f, err := os.OpenFile(r.Filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer f.Close()
 
-	if _, err = f.WriteString(r.Created.String() + " | " + r.Name + " | " + r.Surname + " | " + r.Email + "\n"); err != nil {
-		panic(err)
+	if _, err = f.WriteString(reg.Created.String() + " | " + reg.Name + " | " + reg.Surname + " | " + reg.Email + "\n"); err != nil {
+		return err
 	}
-}
 
-func (reg *RegistrationTxtStorage) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case "GET":
-		reg.Registration.displayForm(w, r)
-	case "POST":
-		reg.Registration.processForm(w, r)
-		reg.Store()
-	default:
-		http.Error(w, "Method not allowed.", http.StatusMethodNotAllowed)
-	}
+	return nil
 }
 
 func validateEmail(email string) bool {
