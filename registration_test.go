@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -112,7 +113,7 @@ func TestStoreCall(t *testing.T) {
 
 	dummyStore := DummyStore{storeChecker}
 
-	reg := &Registration{"", "", "", time.Now(), dummyStore}
+	reg := &Registration{Storer: dummyStore}
 
 	req, err := http.NewRequest("POST", "/", strings.NewReader("name=Test&surname=Test&email=test@test.com"))
 	if err != nil {
@@ -122,4 +123,27 @@ func TestStoreCall(t *testing.T) {
 
 	resp := httptest.NewRecorder()
 	reg.ServeHTTP(resp, req)
+}
+
+func TestStoreError(t *testing.T) {
+	storeFailer := func(reg Registration) (err error) {
+		return errors.New("Store failed!")
+	}
+
+	dummyStore := DummyStore{storeFailer}
+
+	reg := &Registration{Storer: dummyStore}
+
+	req, err := http.NewRequest("POST", "/", strings.NewReader("name=Test&surname=Test&email=test@test.com"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	resp := httptest.NewRecorder()
+	reg.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusInternalServerError {
+		t.Fatal(fmt.Sprintf("Server repled with status %v expected %v", resp.Code, http.StatusInternalServerError))
+	}
 }

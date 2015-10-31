@@ -8,10 +8,12 @@ import (
 	"time"
 )
 
+// RegistrationStorer for separation of domain in storing data of registration
 type RegistrationStorer interface {
 	Store(reg Registration) (err error)
 }
 
+// Registration data structure
 type Registration struct {
 	Name    string
 	Surname string
@@ -20,6 +22,8 @@ type Registration struct {
 	Storer  RegistrationStorer
 }
 
+// ServeHTTP bind to http
+// Will display form on GET and expects form process on POST
 func (reg *Registration) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
@@ -61,10 +65,12 @@ func (reg *Registration) processForm(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// RegTxtStorage will save registrations in form of basic TXT file
 type RegTxtStorage struct {
 	Filename string
 }
 
+// Store implements RegistrationStorer interface
 func (r *RegTxtStorage) Store(reg Registration) (err error) {
 	f, err := os.OpenFile(r.Filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
