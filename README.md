@@ -24,3 +24,9 @@ Work in progress...
 - supporting more than one event
 - after event email
 - after event download data
+
+## Dependencies
+
+```bash
+go get github.com/russross/blackfriday
+```
