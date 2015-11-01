@@ -147,3 +147,24 @@ func TestStoreError(t *testing.T) {
 		t.Fatal(fmt.Sprintf("Server repled with status %v expected %v", resp.Code, http.StatusInternalServerError))
 	}
 }
+
+func TestSuccessMsgDisplay(t *testing.T) {
+	resp := httptest.NewRecorder()
+
+	req, err := http.NewRequest("POST", "/", strings.NewReader("name=Test&surname=Test&email=test@test.com"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	reg := NewDummyReg()
+	reg.ServeHTTP(resp, req)
+
+	if resp.Code != http.StatusOK {
+		t.Fatal(fmt.Sprintf("Server repled with status %v expected %v", resp.Code, http.StatusOK))
+	}
+
+	if !strings.Contains(resp.Body.String(), registrationSuccessful) {
+		t.Fatal(fmt.Sprintf("Registraton dose not contain success message, expected \"%s\"", registrationSuccessful))
+	}
+}

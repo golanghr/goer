@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+const (
+	registrationSuccessful = "You succesfuly registred."
+)
+
 // RegistrationStorer for separation of domain in storing data of registration
 type RegistrationStorer interface {
 	Store(reg Registration) (err error)
@@ -63,6 +67,10 @@ func (reg *Registration) processForm(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error %s while storing registration %+v\n", err, reg)
 		http.Error(w, "Registration storage failed.", http.StatusInternalServerError)
 	}
+
+	p := make(map[string]interface{})
+	p["success_msg"] = registrationSuccessful
+	tpls["registration"].Execute(w, p)
 }
 
 // RegTxtStorage will save registrations in form of basic TXT file

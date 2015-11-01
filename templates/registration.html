@@ -4,7 +4,12 @@
   <div class="mdl-card mdl-cell mdl-cell--12-col">
     <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
       <h4 class="card-title mdl-cell mdl-cell--12-col">Event registration</h4>
-			
+
+			{{if .success_msg}}
+			<div class="isa_success">
+				{{.success_msg}}
+			</div>
+			{{end}}
 			
 			<form id="registrationForm" action="/" method="post">
 				
