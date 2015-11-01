@@ -1,11 +1,14 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"regexp"
 	"time"
+
+	"github.com/golanghr/goer/lib/content"
 )
 
 const (
@@ -19,11 +22,12 @@ type RegistrationStorer interface {
 
 // Registration data structure
 type Registration struct {
-	Name    string
-	Surname string
-	Email   string
-	Created time.Time
-	Storer  RegistrationStorer
+	Name     string
+	Surname  string
+	Email    string
+	Created  time.Time
+	Storer   RegistrationStorer
+	InfoFile string
 }
 
 // ServeHTTP bind to http
@@ -41,6 +45,22 @@ func (reg *Registration) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (reg *Registration) displayForm(w http.ResponseWriter, r *http.Request) {
 	p := make(map[string]interface{})
+
+	if len(reg.InfoFile) > 0 {
+		infoTextFile, err := os.Open(reg.InfoFile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer infoTextFile.Close()
+
+		info, err := content.HTML(infoTextFile)
+		if err != nil {
+			log.Printf("Error in info text generation %s\n", err)
+			http.Error(w, "Error in rendering.", http.StatusInternalServerError)
+			return
+		}
+		p["info"] = template.HTML(info)
+	}
 
 	tpls["registration"].Execute(w, p)
 }
@@ -66,10 +86,28 @@ func (reg *Registration) processForm(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Error %s while storing registration %+v\n", err, reg)
 		http.Error(w, "Registration storage failed.", http.StatusInternalServerError)
+		return
 	}
 
 	p := make(map[string]interface{})
 	p["success_msg"] = registrationSuccessful
+
+	if len(reg.InfoFile) > 0 {
+		infoTextFile, err := os.Open(reg.InfoFile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer infoTextFile.Close()
+
+		info, err := content.HTML(infoTextFile)
+		if err != nil {
+			log.Printf("Error in info text generation %s\n", err)
+			http.Error(w, "Error in rendering.", http.StatusInternalServerError)
+			return
+		}
+		p["info"] = template.HTML(info)
+	}
+
 	tpls["registration"].Execute(w, p)
 }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="hr">
   <head>
-    <title>GolangHr events {{.Title}}</title>
+    <title>GolangHr events</title>
 
 		<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,50 +18,34 @@
 		{{template "header" .}}
 		
   </head>
-  <body class="mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+  <body class="">
 
-		<div class="mdl-layout mdl-js-layout">
-			<header class="mdl-layout__header mdl-layout__header--scroll">
-				<div class="mdl-layout__header-row">
-					<!-- Title -->
-					<span class="mdl-layout-title">Title</span>
-					<!-- Add spacer, to align navigation to the right -->
-					<div class="mdl-layout-spacer"></div>
-					<!-- Navigation -->
-					<nav class="mdl-navigation">
-						<a class="mdl-navigation__link" href="">Link</a>
-						<a class="mdl-navigation__link" href="">Link</a>
-						<a class="mdl-navigation__link" href="">Link</a>
-						<a class="mdl-navigation__link" href="">Link</a>
-					</nav>
-				</div>
-			</header>
-			<div class="mdl-layout__drawer">
-				<span class="mdl-layout-title">Title</span>
-				<nav class="mdl-navigation">
-					<a class="mdl-navigation__link" href="">Link</a>
-					<a class="mdl-navigation__link" href="">Link</a>
-					<a class="mdl-navigation__link" href="">Link</a>
-					<a class="mdl-navigation__link" href="">Link</a>
-				</nav>
-			</div>
-			<main class="mdl-layout__content">
-				<div class="page-content event-container">
-					<div class="event-content">
+		<div class="mdl-layout mdl-js-layout mdl-color--grey-100">
+      <div class="ribbon"></div>
+      <main class="mdl-layout__content">
+        <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+          <div class="mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
 
 						{{template "content" .}}
-
-					</div>
-				</div>
-
-				<footer class="mdl-mini-footer">
-					<div class="mdl-mini-footer__left-section">
-						<div class="mdl-logo">Powerd by Go</div>
-					</div>
-				</footer>
+						
+          </div>
+        </div>
+        <footer class="mdl-mini-footer">
+          <div class="mdl-mini-footer--left-section">
+            <div class="mdl-logo">Powerd by Go</div>
+          </div>
+        </footer>
       </main>
     </div>
 
+		<a href="#registrationForm" id="register-bait" class="mdl-button mdl-js-button mdl-button--fab mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">
+			<i class="material-icons">add</i>
+		</a>
+		<div class="mdl-tooltip" for="register-bait">
+			Register
+		</div>
+		
 	  <script src="/resources/mdl/material.min.js"></script>
   </body>
 </html>

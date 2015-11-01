@@ -14,25 +14,42 @@
  * limitations under the License.
  */
 
-.event-container {
-  max-width: 1600px;
-  /*width: calc(100% - 16px);*/
-  margin: 0 auto;
+.ribbon {
+    width: 100%;
+    height: 40vh;
+    background-color: #3F51B5;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
 }
 
-.event-content {
-  border-radius: 2px;
-  padding: 80px 56px;
-  margin-bottom: 80px;
+main {
+    margin-top: -35vh;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
 }
 
-section.section--center {
-  max-width: 860px;
+footer {
+    margin-top: 4em;
 }
 
-.section__form {
-    padding-top: 1.5em;
-    padding-bottom: 3em;
+.section--info {
+    padding: 1em 2em;
+}
+
+.section--info .mdl-data-table {
+    margin-bottom: 2em;
+}
+
+#register-bait {
+    position: fixed;
+    display: block;
+    right: 0;
+    bottom: 0;
+    margin-right: 40px;
+    margin-bottom: 40px;
+    z-index: 900;
 }
 
 .card-title {

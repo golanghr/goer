@@ -26,7 +26,8 @@ func NewDummyReg() *Registration {
 		"",
 		"",
 		time.Now(),
-		dummyStore}
+		dummyStore,
+		""}
 }
 
 func TestFormDisplay(t *testing.T) {

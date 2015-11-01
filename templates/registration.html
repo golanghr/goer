@@ -1,5 +1,9 @@
 {{define "content"}}
 
+<section class="section--center section--info mdl-shadow--2dp">
+		{{.info}}
+</section>
+
 <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
   <div class="mdl-card mdl-cell mdl-cell--12-col">
     <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
@@ -11,7 +15,7 @@
 			</div>
 			{{end}}
 			
-			<form id="registrationForm" action="/" method="post">
+			<form id="registrationForm" action="/#registrationForm" method="post">
 				
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 					<input class="mdl-textfield__input" type="text" id="name" name="name" pattern="[A-Za-z\sČĆŽŠĐčćžšđ]+" data-required />
@@ -80,6 +84,10 @@ $(document).ready(function(){
     $('.mdl-textfield__input[data-required]').keyup(function(ev) {
 	checkAllRequiredFields();
     });
+
+    $('.section--info table').addClass('mdl-data-table');
+    $('.section--info th').addClass('mdl-data-table__cell--non-numeric');
+    $('.section--info td').addClass('mdl-data-table__cell--non-numeric');
     
 });
 </script>
