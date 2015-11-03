@@ -144,7 +144,7 @@ func TestStoreError(t *testing.T) {
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusInternalServerError {
-		t.Fatal("Server replied with status %v expected %v", resp.Code, http.StatusInternalServerError)
+		t.Fatalf("Server replied with status %v expected %v", resp.Code, http.StatusInternalServerError)
 	}
 }
 
