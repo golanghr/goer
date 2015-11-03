@@ -103,7 +103,7 @@ func TestStoreCall(t *testing.T) {
 	storeCalled := false
 	defer func() {
 		if storeCalled == false {
-			t.Fatal(fmt.Sprintf("Store not called!"))
+			t.Fatal("Store not called!")
 		}
 	}()
 
