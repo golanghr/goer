@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -162,10 +161,10 @@ func TestSuccessMsgDisplay(t *testing.T) {
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusOK {
-		t.Fatal(fmt.Sprintf("Server repled with status %v expected %v", resp.Code, http.StatusOK))
+		t.Fatalf("Server replied with status %v expected %v", resp.Code, http.StatusOK)
 	}
 
 	if !strings.Contains(resp.Body.String(), registrationSuccessful) {
-		t.Fatal(fmt.Sprintf("Registraton dose not contain success message, expected \"%s\"", registrationSuccessful))
+		t.Fatalf("Registration does not contain success message, expected %q", registrationSuccessful)
 	}
 }
