@@ -24,7 +24,7 @@ func main() {
 
 	http.Handle("/", &Registration{
 		Storer:   regTxtStorage,
-		InfoFile: sitePath + "content/event_info.mk"})
+		InfoFile: sitePath + "content/event_info.md"})
 
 	http.Handle("/resources/", gzip.Handler(static.Handler(sitePath)))
 
