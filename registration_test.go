@@ -95,7 +95,7 @@ func TestFormProcessOkRequest(t *testing.T) {
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusOK {
-		t.Fatal(fmt.Sprintf("Server repled with status %v expected %v", resp.Code, http.StatusOK))
+		t.Fatalf("Server replied with status %v expected %v", resp.Code, http.StatusOK)
 	}
 }
 
