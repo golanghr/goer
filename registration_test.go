@@ -62,7 +62,7 @@ func TestFormProcessBadRequest(t *testing.T) {
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusBadRequest {
-		t.Fatal(fmt.Sprintf("Server repled with status %v expected %v", resp.Code, http.StatusBadRequest))
+		t.Fatalf("Server replied with status %v expected %v", resp.Code, http.StatusBadRequest)
 	}
 
 	// test bad mail format
@@ -78,7 +78,7 @@ func TestFormProcessBadRequest(t *testing.T) {
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusBadRequest {
-		t.Fatal(fmt.Sprintf("Server repled with status %v expected %v", resp.Code, http.StatusBadRequest))
+		t.Fatalf("Server replied with status %v expected %v", resp.Code, http.StatusBadRequest)
 	}
 }
 
