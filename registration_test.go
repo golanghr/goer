@@ -41,11 +41,11 @@ func TestFormDisplay(t *testing.T) {
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusOK {
-		t.Fatalf("Server replied with status %v expected %v", resp.Code, http.StatusOK)
+		t.Errorf("Server replied with status %v expected %v", resp.Code, http.StatusOK)
 	}
 
 	if !strings.Contains(resp.Body.String(), "<form") {
-		t.Fatal("Registration does not contain form element!")
+		t.Error("Registration does not contain form element!")
 	}
 }
 
@@ -61,7 +61,7 @@ func TestFormProcessBadRequest(t *testing.T) {
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusBadRequest {
-		t.Fatalf("Server replied with status %v expected %v", resp.Code, http.StatusBadRequest)
+		t.Errorf("Server replied with status %v expected %v", resp.Code, http.StatusBadRequest)
 	}
 
 	// test bad mail format
@@ -77,7 +77,7 @@ func TestFormProcessBadRequest(t *testing.T) {
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusBadRequest {
-		t.Fatalf("Server replied with status %v expected %v", resp.Code, http.StatusBadRequest)
+		t.Errorf("Server replied with status %v expected %v", resp.Code, http.StatusBadRequest)
 	}
 }
 
@@ -94,7 +94,7 @@ func TestFormProcessOkRequest(t *testing.T) {
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusOK {
-		t.Fatalf("Server replied with status %v expected %v", resp.Code, http.StatusOK)
+		t.Errorf("Server replied with status %v expected %v", resp.Code, http.StatusOK)
 	}
 }
 
@@ -102,7 +102,7 @@ func TestStoreCall(t *testing.T) {
 	storeCalled := false
 	defer func() {
 		if storeCalled == false {
-			t.Fatal("Store not called!")
+			t.Error("Store not called!")
 		}
 	}()
 
@@ -144,7 +144,7 @@ func TestStoreError(t *testing.T) {
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusInternalServerError {
-		t.Fatalf("Server replied with status %v expected %v", resp.Code, http.StatusInternalServerError)
+		t.Errorf("Server replied with status %v expected %v", resp.Code, http.StatusInternalServerError)
 	}
 }
 
@@ -161,10 +161,10 @@ func TestSuccessMsgDisplay(t *testing.T) {
 	reg.ServeHTTP(resp, req)
 
 	if resp.Code != http.StatusOK {
-		t.Fatalf("Server replied with status %v expected %v", resp.Code, http.StatusOK)
+		t.Errorf("Server replied with status %v expected %v", resp.Code, http.StatusOK)
 	}
 
 	if !strings.Contains(resp.Body.String(), registrationSuccessful) {
-		t.Fatalf("Registration does not contain success message, expected %q", registrationSuccessful)
+		t.Errorf("Registration does not contain success message, expected %q", registrationSuccessful)
 	}
 }
