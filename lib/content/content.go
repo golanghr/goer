@@ -7,14 +7,14 @@ import (
 	"github.com/russross/blackfriday"
 )
 
-// HTML converst content of reader containg markdown content to HTML
-func HTML(r io.Reader) (html string, err error) {
-	mk, err := ioutil.ReadAll(r)
+// HTML converts markdown.
+func HTML(r io.Reader) (string, error) {
+	md, err := ioutil.ReadAll(r)
 	if err != nil {
 		return "", err
 	}
 
-	htmlbytes := blackfriday.MarkdownCommon(mk)
+	htmlBytes := blackfriday.MarkdownCommon(md)
 
-	return string(htmlbytes), nil
+	return string(htmlBytes), nil
 }
